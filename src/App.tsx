@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Web3 } from 'web3';
 import './App.css';
+import contractData from './contracts/LostAndFound.json';
 
 declare global {
   interface Window {
@@ -14,6 +15,9 @@ function App() {
   const [description, setDescription] = useState('');
   const [location, setLocation] = useState('');
   const [reward, setReward] = useState('');
+  const [contract, setContract] = useState<any>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string>('');
 
   useEffect(() => {
     const initWeb3 = async () => {
@@ -28,15 +32,23 @@ function App() {
           const accounts = await web3Instance.eth.getAccounts();
           setAccount(accounts[0]);
 
+          // Initialize contract
+          const contractInstance = new web3Instance.eth.Contract(
+            contractData.abi,
+            contractData.address
+          );
+          setContract(contractInstance);
+
           // Listen for account changes
           window.ethereum.on('accountsChanged', (accounts: string[]) => {
             setAccount(accounts[0]);
           });
         } catch (error) {
           console.error("User denied account access");
+          setError("Please connect your MetaMask wallet");
         }
       } else {
-        console.log('Please install MetaMask!');
+        setError('Please install MetaMask!');
       }
     };
 
@@ -45,10 +57,37 @@ function App() {
 
   const handleRegisterItem = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!web3) return;
+    if (!web3 || !contract || !account) {
+      setError('Please connect your wallet first');
+      return;
+    }
 
-    // Contract interaction will be implemented here
-    console.log('Registering item:', { description, location, reward });
+    setLoading(true);
+    setError('');
+
+    try {
+      const registrationFee = await contract.methods.registrationFee().call();
+      const rewardInWei = web3.utils.toWei(reward, 'ether');
+
+      await contract.methods.registerItem(description, location, rewardInWei)
+        .send({
+          from: account,
+          value: registrationFee,
+          gas: 300000 // Gas limit
+        });
+
+      // Clear form after successful registration
+      setDescription('');
+      setLocation('');
+      setReward('');
+      
+      alert('Item registered successfully!');
+    } catch (err: any) {
+      console.error('Error registering item:', err);
+      setError(err.message || 'Error registering item. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -65,6 +104,7 @@ function App() {
       <main>
         <section className="register-item">
           <h2>Register Lost Item</h2>
+          {error && <div className="error-message">{error}</div>}
           <form onSubmit={handleRegisterItem}>
             <div>
               <label>Description:</label>
@@ -74,6 +114,7 @@ function App() {
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="Item description"
                 required
+                disabled={loading}
               />
             </div>
             <div>
@@ -84,6 +125,7 @@ function App() {
                 onChange={(e) => setLocation(e.target.value)}
                 placeholder="Last known location"
                 required
+                disabled={loading}
               />
             </div>
             <div>
@@ -95,9 +137,12 @@ function App() {
                 onChange={(e) => setReward(e.target.value)}
                 placeholder="Reward amount in ETH"
                 required
+                disabled={loading}
               />
             </div>
-            <button type="submit">Register Item</button>
+            <button type="submit" disabled={loading}>
+              {loading ? 'Registering...' : 'Register Item'}
+            </button>
           </form>
         </section>
       </main>
