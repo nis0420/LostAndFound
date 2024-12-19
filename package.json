@@ -4,7 +4,10 @@
   "description": "A decentralized Lost and Found application built with React and Solidity.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
   },
   "repository": {
     "type": "git",
@@ -16,15 +19,36 @@
   "bugs": {
     "url": "https://github.com/nis0420/LostAndFound/issues"
   },
-  "homepage": "https://github.com/nis0420/LostAndFound#readme",
+  "homepage": ".",
   "dependencies": {
-    "@openzeppelin/contracts": "^5.1.0",
-    "@types/node": "^22.10.2",
-    "@types/react": "^19.0.2",
-    "@types/react-dom": "^19.0.2",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "typescript": "^5.7.2",
-    "web3": "^4.16.0"
+    "@openzeppelin/contracts": "^4.9.0",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "@truffle/hdwallet-provider": "^2.1.15",
+    "@types/node": "^16.7.13",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-scripts": "5.0.1",
+    "solc": "^0.8.0",
+    "typescript": "^4.4.2",
+    "web3": "^4.3.0"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@types/web3": "^1.2.2"
   }
 }
