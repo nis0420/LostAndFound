@@ -1,0 +1,46 @@
+.register-item {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.register-item form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.register-item div {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.register-item label {
+  font-weight: bold;
+}
+
+.register-item input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.register-item button {
+  padding: 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.register-item button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.error-message {
+  color: #ff0000;
+  margin-bottom: 10px;
+}
