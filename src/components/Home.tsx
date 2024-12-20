@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Web3 } from 'web3';
+import { useNavigate } from 'react-router-dom';
 import './Home.css';
 
 interface HomeProps {
@@ -22,6 +23,7 @@ const Home: React.FC<HomeProps> = ({ web3, contract, account }) => {
   const [lostItems, setLostItems] = useState<LostItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchLostItems = async () => {
@@ -73,6 +75,10 @@ const Home: React.FC<HomeProps> = ({ web3, contract, account }) => {
     fetchLostItems();
   }, [web3, contract, account]);
 
+  const handleCardClick = (itemId: string) => {
+    navigate(`/item/${itemId}`);
+  };
+
   if (loading) return <div className="loading">Loading lost items...</div>;
   if (error) return <div className="error">{error}</div>;
   if (!contract) return <div className="error">Please connect your wallet to view lost items.</div>;
@@ -85,7 +91,13 @@ const Home: React.FC<HomeProps> = ({ web3, contract, account }) => {
       ) : (
         <div className="items-grid">
           {lostItems.map((item) => (
-            <div key={item.id} className="item-card">
+            <div 
+              key={item.id} 
+              className="item-card"
+              onClick={() => handleCardClick(item.id)}
+              role="button"
+              tabIndex={0}
+            >
               <h3>Item #{item.id}</h3>
               <p><strong>Description:</strong> {item.description}</p>
               <p><strong>Location:</strong> {item.location}</p>

@@ -16,11 +16,18 @@
   border-radius: 8px;
   padding: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s;
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
 }
 
 .item-card:hover {
   transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.item-card:focus {
+  outline: 2px solid #3498db;
+  outline-offset: 2px;
 }
 
 .item-card h3 {
@@ -32,10 +39,14 @@
   margin: 8px 0;
 }
 
-.item-card .owner {
+.item-card .owner,
+.item-card .finder {
   font-size: 0.9em;
   color: #666;
   word-break: break-all;
+  background: #f8f9fa;
+  padding: 5px;
+  border-radius: 4px;
 }
 
 .loading {

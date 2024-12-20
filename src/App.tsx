@@ -5,6 +5,7 @@ import './App.css';
 import contractData from './contracts/LostAndFound.json';
 import Register from './components/Register';
 import Home from './components/Home';
+import ItemDetails from './components/ItemDetails';
 
 declare global {
   interface Window {
@@ -107,6 +108,16 @@ function App() {
               path="/register" 
               element={
                 <Register 
+                  web3={web3}
+                  contract={contract}
+                  account={account}
+                />
+              } 
+            />
+            <Route 
+              path="/item/:id" 
+              element={
+                <ItemDetails 
                   web3={web3}
                   contract={contract}
                   account={account}
