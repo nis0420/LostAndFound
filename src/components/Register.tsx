@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Web3 } from 'web3';
+import { useNavigate } from 'react-router-dom';
 import './Register.css';
 
 interface RegisterProps {
@@ -14,6 +15,7 @@ const Register: React.FC<RegisterProps> = ({ web3, contract, account }) => {
   const [reward, setReward] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string>('');
+  const navigate = useNavigate();
 
   const handleRegisterItem = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,7 +43,8 @@ const Register: React.FC<RegisterProps> = ({ web3, contract, account }) => {
       setLocation('');
       setReward('');
       
-      alert('Item registered successfully!');
+      // Navigate to home page after successful registration
+      navigate('/');
     } catch (err: any) {
       console.error('Error registering item:', err);
       setError(err.message || 'Error registering item. Please try again.');
@@ -49,6 +52,10 @@ const Register: React.FC<RegisterProps> = ({ web3, contract, account }) => {
       setLoading(false);
     }
   };
+
+  if (!web3 || !contract || !account) {
+    return <div className="error">Please connect your wallet to register items.</div>;
+  }
 
   return (
     <section className="register-item">
